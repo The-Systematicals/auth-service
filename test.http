@@ -1,0 +1,16 @@
+# GET http://localhost:3501/users/find/4ebcdf80-b1e6-4170-823e-b6735dbeec1f
+# Accept: application/json
+
+
+GET http://localhost:3501/users/findAll
+Accept: application/json
+
+# PATCH http://localhost:3501/users/remove/4ebcdf80-b1e6-4170-823e-b6735dbeec1f
+# Accept: application/json
+
+# PATCH http://localhost:3501/users/edit/4ebcdf80-b1e6-4170-823e-b6735dbeec1f
+# Accept: application/json
+
+# {
+#     "is_deleted": 0
+# }
