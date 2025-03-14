@@ -1,13 +1,9 @@
-import { User, users } from '../../databases/schemas';
-import { BaseRepository } from '../../repositories';
-import { BaseService } from '../../services';
-import { BaseTransformer } from '../../transformers';
+import { User } from '../../databases/schemas';
+import { BaseServiceType } from '../../types/services.type';
 import { logger } from '../infra';
 import { EventMessage } from './types.broker';
 
-const baseRepo = new BaseService<User>(new BaseRepository(users), new BaseTransformer());
-
-export const createUser = async (message: EventMessage) => {
+export const createUser = async (message: EventMessage, baseRepo: BaseServiceType<User>) => {
   try {
     const data = message.data;
     const condition = { username: data.username, email: data.email };
@@ -18,7 +14,7 @@ export const createUser = async (message: EventMessage) => {
   }
 };
 
-export const updateUser = async (message: EventMessage) => {
+export const updateUser = async (message: EventMessage, baseRepo: BaseServiceType<User>) => {
   try {
     const data = message.data;
     const condition = { id: data.id };
@@ -29,7 +25,7 @@ export const updateUser = async (message: EventMessage) => {
   }
 };
 
-export const deleteUser = async (message: EventMessage) => {
+export const deleteUser = async (message: EventMessage, baseRepo: BaseServiceType<User>) => {
   try {
     const data = message.data;
     baseRepo.remove(data.id);

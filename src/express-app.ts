@@ -10,9 +10,7 @@ export const ExpressApp = async () => {
   app.use(cors());
   app.use(express.json());
   app.use(httpLogger);
-
-  await BrokerListener();
-
+  // await BrokerListener();
   app.use(routes);
 
   app.use('/', (req: Request, res: Response, _: NextFunction): any => {

@@ -21,6 +21,7 @@ export const SUCCESS = (req: Request, routeName: string = '') => {
     FoundAll: `${name} Successfully Retrieved All!`,
     Edited: `${name} Successfully Updated!`,
     Removed: `${name} Successfully Deleted!`,
+    LoggedIn: `User Successfully Logged in!`,
   };
 };
 

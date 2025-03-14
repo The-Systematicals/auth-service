@@ -1,12 +1,24 @@
-import bcrypt from 'bcryptjs';
 import { Request } from 'express';
+import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 
 import { CONFIG } from '../../configs';
 
+const ACCESS_TOKEN_LIFESPAN = '15m'; // 15 minutes
+const REFRESH_TOKEN_LIFESPAN = '7d'; // 7 days
+
 // generate starts here ...
 export const generateUUID = (): string => {
   return uuidv4();
+};
+
+export const generateTokens = (payload: object) => {
+  const accessToken = jwt.sign(payload, CONFIG.API_KEY + CONFIG.HASH_SECRET, { expiresIn: ACCESS_TOKEN_LIFESPAN });
+  const refreshToken = jwt.sign(payload, CONFIG.REFRESH_API_KEY + CONFIG.HASH_SECRET, {
+    expiresIn: REFRESH_TOKEN_LIFESPAN,
+  });
+
+  return { accessToken, refreshToken };
 };
 
 // set starts here ...

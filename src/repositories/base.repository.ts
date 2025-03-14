@@ -2,7 +2,7 @@ import { and, desc, eq, or } from 'drizzle-orm';
 
 import { DB } from '../databases';
 import { BaseRepositoryType } from '../types/repositories.type';
-import { bool, getDateTime, getUserId } from '../utils';
+import { bool, getDateTime } from '../utils';
 
 export class BaseRepository<T> implements BaseRepositoryType<T> {
   private table: any;
@@ -33,7 +33,7 @@ export class BaseRepository<T> implements BaseRepositoryType<T> {
       .orderBy(desc(this.table.updatedAt));
   }
 
-  async update(condition: Record<string, T>, data: Partial<T>): Promise<T> {
+  async update(condition: Record<string, any>, data: Partial<T>): Promise<T> {
     let conditions = Object.entries(condition).map(([key, value]) => eq(this.table[key], value));
 
     const updatedData = {
