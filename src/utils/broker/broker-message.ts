@@ -1,13 +1,24 @@
-import { Consumer, Kafka, Partitioners, Producer, logLevel } from 'kafkajs';
+import { Consumer, Kafka, LogEntry, Partitioners, Producer, logCreator, logLevel } from 'kafkajs';
 
 import { CONFIG } from '../../configs';
 import { logger } from '../infra';
 import { EventMessage, EventTopics, Events, MessageBroker, MessageHandler, Publish } from './types.broker';
 
-const kafka = new Kafka({
+const kafkaLogCreator: logCreator = () => (entry: LogEntry) => {
+  const levels: { [key in logLevel.WARN | logLevel.INFO]: 'warn' | 'info' } = {
+    [logLevel.WARN]: 'warn',
+    [logLevel.INFO]: 'info',
+  };
+
+  const logMethod = levels[entry.level as logLevel.WARN | logLevel.INFO] || 'info';
+  logger[logMethod](entry.log);
+};
+
+export const kafka = new Kafka({
   clientId: CONFIG.EVENT_CLIENT_ID,
   brokers: CONFIG.EVENT_BROKERS.length ? CONFIG.EVENT_BROKERS : ['localhost:9092'],
   logLevel: logLevel.INFO,
+  logCreator: kafkaLogCreator,
 });
 
 let producer: Producer;
@@ -71,8 +82,7 @@ const publish = async (data: Publish): Promise<boolean> => {
     ],
   });
 
-  logger.info('message:');
-  logger.info(data);
+  logger.info('User Data successfully sent to Auth service!');
 
   return result.length > 0;
 };

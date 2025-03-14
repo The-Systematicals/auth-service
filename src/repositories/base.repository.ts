@@ -50,11 +50,9 @@ export class BaseRepository<T> implements BaseRepositoryType<T> {
   }
 
   async delete(id: string | number): Promise<boolean> {
-    const [deleted] = await DB.update(this.table)
-      .set({ deletedUserId: getUserId(), isDeleted: bool.YES })
-      .where(eq(this.table.id, id))
-      .returning();
-    return deleted.length;
+    const deleted = await DB.delete(this.table).where(eq(this.table.id, id)).returning({ id: this.table.id }); // Ensure it returns an array
+
+    return deleted.length > 0; // Check if any row was deleted
   }
 
   async findDataExistOr(data: Record<string, any>): Promise<boolean> {
